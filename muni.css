@@ -1,0 +1,23 @@
+body {
+  display: block;
+  font-family: monospace;
+  white-space: pre;
+  margin: 8px;
+}
+h3, ul {
+  margin: 0px;
+  padding: 0px;
+}
+.top {
+  position: fixed;
+  top: 0;
+}
+ul {
+  list-style: none;
+  margin-top: -2em;
+}
+li:last-child {
+  color: rgba(0,0,0,0.75);
+  font-size: 0.9em;
+  font-style: italic;
+}
