@@ -45,7 +45,7 @@ function timeStamp() {
   return time.join(':') + ' ' + suffix;
 }
 
-function timeStr(epoch, train, station) {
+function timeStr(epoch) {
   var now = Math.floor((new Date).getTime() / 1000);
   var delta = Math.floor(epoch / 1000) - now;
   var hrs = Math.floor(delta / 3600);
@@ -53,8 +53,7 @@ function timeStr(epoch, train, station) {
   var sec = delta - (hrs * 3600) - (min * 60);
   if (min < 10) { min = '0' + min; }
   if (sec < 10) { sec = '0' + sec; }
-  if (train.length < 2) { train = ' ' + train; }
-  var str = min + ':' + sec + ' - ' + train + ' - ' + station;
+  var str = min + ':' + sec;
   if (hrs > 0) {
     return hrs + ':' + str;
   } else {
@@ -111,8 +110,10 @@ function updateLists() {
       clearLi(dir);
       $.each(Object.keys(entries).sort(), function(i, epoch) {
         $.each(entries[epoch], function(i, entry) {
-          text = timeStr(epoch, entry['train'], entry['station']);
-          text += ' - ' + entry['direction_title'];
+          text = timeStr(epoch) + ' - ';
+          if (entry['train'].length < 2) { text += ' '; }
+          text += entry['train'] + ' - ' +
+                  entry['direction_title'].split('bound to ').pop();
           addLi(dir, text);
         });
       });
