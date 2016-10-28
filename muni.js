@@ -12,12 +12,6 @@ var ROUTES = {
   },
 };
 
-function addLi(dir, text) {
-  var li = document.createElement('LI');
-  li.innerText = text;
-  document.getElementById(dir).appendChild(li);
-}
-
 function clearAllIntervals() {
   for (var i = 1; i < 99999; i++) {
     window.clearInterval(i);
@@ -48,6 +42,7 @@ function timeStamp() {
 function timeStr(epoch) {
   var now = Math.floor((new Date).getTime() / 1000);
   var delta = Math.floor(epoch / 1000) - now;
+  if (delta <= 0) { return "-1" }
   var hrs = Math.floor(delta / 3600);
   var min = Math.floor((delta - (hrs * 3600)) / 60);
   var sec = delta - (hrs * 3600) - (min * 60);
@@ -75,6 +70,7 @@ function xmlPromise(name) {
 function updateLists() {
   var promises = {};
   var url;
+  clearAllIntervals();
   $.each(ROUTES, function(dir, dir_data) {
     promises[dir] = [];
     $.each(dir_data, function(train, stop_id) {
@@ -86,7 +82,6 @@ function updateLists() {
       var entries = {};
       var epoch;
       var predictions;
-      var text;
       var xml;
       $.each(responses, function(i, response) {
         xml = response.value.documentElement;
@@ -110,17 +105,36 @@ function updateLists() {
       clearLi(dir);
       $.each(Object.keys(entries).sort(), function(i, epoch) {
         $.each(entries[epoch], function(i, entry) {
-          text = timeStr(epoch) + ' - ';
-          if (entry['train'].length < 2) { text += ' '; }
-          text += entry['train'] + ' - ' +
-                  entry['direction_title'].split('bound to ').pop();
-          addLi(dir, text);
+          var text = ' - ' + (entry['train'] + " ").slice(0,2) + ' - ' +
+                     entry['direction_title'].split('bound to ').pop();
+          var li = document.createElement('LI');
+          li.className = 'train';
+          li.setAttribute('epoch', epoch);
+          li.setAttribute('text', text);
+          li.innerText = timeStr(epoch) + text;
+          document.getElementById(dir).appendChild(li);
         });
       });
-      text = 'last update ' + timeStamp();
-      addLi(dir, text);
+      var li = document.createElement('LI');
+      li.innerText = 'last update ' + timeStamp();
+      document.getElementById(dir).appendChild(li);
+      setInterval(updateTimes, 5000);
     });
   });
+};
+
+function updateTimes() {
+  var time = '';
+  var trains = document.getElementsByClassName('train');
+  for (var i = 0; i < trains.length; i++) {
+    li = trains[i];
+    time = timeStr(li.getAttribute('epoch'));
+    if (time == "-1") {
+      li.parentNode.removeChild(li);
+      continue;
+    }
+    li.innerText = timeStr(li.getAttribute('epoch')) + li.getAttribute('text');
+  }
 };
 
 $(document).ready(function() {
@@ -128,7 +142,6 @@ $(document).ready(function() {
   setInterval(updateLists, 30 * 1000);
   function onFocus(){
     updateLists();
-    clearAllIntervals();
     setInterval(updateLists, 30 * 1000);
   };
   window.onfocus = onFocus;
