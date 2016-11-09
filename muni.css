@@ -1,5 +1,6 @@
 body {
   display: block;
+  font-size: 14px;
   font-family: monospace;
   white-space: pre;
   margin: 8px;
@@ -16,6 +17,11 @@ ul {
   list-style: none;
   margin-top: -2em;
 }
+
+p {
+  margin: 0;
+}
+
 li:last-child {
   color: rgba(0,0,0,0.75);
   font-size: 0.9em;
