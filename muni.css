@@ -5,17 +5,24 @@ body {
   white-space: pre;
   margin: 8px;
 }
+
 h3, ul {
   margin: 0px;
   padding: 0px;
 }
+
 .top {
   position: fixed;
   top: 0;
 }
+
 ul {
   list-style: none;
   margin-top: -2em;
+}
+
+li.N, li.KT {
+  font-weight: bold;
 }
 
 p {

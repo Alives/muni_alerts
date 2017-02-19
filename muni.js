@@ -3,7 +3,10 @@ var API_URL = "http://webservices.nextbus.com/service/publicXMLFeed?command=" +
   "predictions&a=" + AGENCY;
 var ROUTES = {
   Inbound: {
+    J: 17073,
     KT: 15726,
+    L: 15726,
+    M: 15726,
     N: 17318
   },
   Outbound: {
@@ -118,7 +121,7 @@ function updateLists() {
           if (time == "-1") {
             return;
           }
-          li.className = "train";
+          li.className = "train " + entry.train;
           li.setAttribute("epoch", epoch);
           li.setAttribute("text", text);
           n = document.createTextNode(time + text);
