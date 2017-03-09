@@ -12,7 +12,7 @@ h3, ul {
 }
 
 .top {
-  position: fixed;
+  position: absolute;
   top: 0;
 }
 
