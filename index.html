@@ -1,7 +1,9 @@
 <html>
   <head>
     <title>Muni Alerts</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
     <link rel="icon" type="image/png" href="favicon.png" />
     <link rel="stylesheet" type="text/css" href="bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="muni.css">
@@ -11,11 +13,43 @@
     <script src="muni.js"></script>
   </head>
   <body>
-    <div id="content" class="top">
-      <h3 class="top Inbound">Inbound:</h3>
-      <ul id="Inbound"></ul>
-      <h3 class="Outbound">Outbound:</h3>
-      <ul id="Outbound"></ul>
+    <div class="content">
+      <div class="direction">
+        <div class="chart">
+          <div class="heading">
+            <h3>&#x1F3E0; </h3>
+            <h3 class="rot180">&leftarrow;</h3>
+            <h3> &#x1F689;</h3>
+          </div>
+          <ul id="HomeToEmbarcadero"></ul>
+        </div>
+        <div class="chart">
+          <div class="heading">
+            <h3>&#x1F689; </h3>
+            <h3 class="rot180">&leftarrow;</h3>
+            <h3> &#x1F3E2;</h3>
+          </div>
+          <ul id="EmbarcaderoToWork"></ul>
+        </div>
+      </div>
+      <div class="direction">
+        <div class="chart">
+          <div class="heading">
+            <h3>&#x1F689; </h3>
+            <h3>&leftarrow;</h3>
+            <h3> &#x1F3E2;</h3>
+          </div>
+          <ul id="WorkToEmbarcadero"></ul>
+        </div>
+        <div class="chart">
+          <div class="heading">
+            <h3>&#x1F3E0; </h3>
+            <h3>&leftarrow;</h3>
+            <h3> &#x1F689;</h3>
+          </div>
+          <ul id="EmbarcaderoToHome"></ul>
+        </div>
+      </div>
     </div>
   </body>
 </html>

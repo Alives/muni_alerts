@@ -2,16 +2,22 @@ var AGENCY = "sf-muni";
 var API_URL = "http://webservices.nextbus.com/service/publicXMLFeed?command=" +
   "predictions&a=" + AGENCY;
 var ROUTES = {
-  Inbound: {
-    J: 17073,
-    KT: 15726,
-    L: 15726,
-    M: 15726,
-    N: 17318
-  },
-  Outbound: {
+  WorkToEmbarcadero: {
     KT: 14510,
     N: 14510
+  },
+  EmbarcaderoToHome: {
+    J: 17217,
+    KT: 17217,
+    N: 17217
+  },
+  EmbarcaderoToWork: {
+    J: 16992,
+    KT: 16992,
+    N: 16992
+  },
+  HomeToEmbarcadero: {
+    J: 13998
   }
 };
 
@@ -100,7 +106,6 @@ function updateLists() {
             entry = {
               train: predictions.getAttribute("routeTag"),
               station: predictions.getAttribute("stopTitle"),
-              direction_title: d.getAttribute("title")
             };
             if (epoch in entries) {
               entries[epoch].push(entry);
@@ -113,8 +118,7 @@ function updateLists() {
       clearLi(dir);
       $.each(Object.keys(entries).sort(), function(i, epoch) {
         $.each(entries[epoch], function(i, entry) {
-          text = " - " + (entry.train + " ").slice(0,2) + " - " +
-                 entry.direction_title.split("bound to ").pop();
+          text = " - " + entry.train;
           li = document.createElement("li");
           p = document.createElement("p");
           time = timeStr(epoch);
@@ -131,7 +135,7 @@ function updateLists() {
         });
       });
       li = document.createElement("li");
-      n = document.createTextNode("last update " + timeStamp());
+      n = document.createTextNode(timeStamp());
       p = document.createElement("p");
       p.appendChild(n);
       li.appendChild(p);
