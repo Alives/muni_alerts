@@ -2,23 +2,25 @@ var AGENCY = "sf-muni";
 var API_URL = "http://webservices.nextbus.com/service/publicXMLFeed?command=" +
   "predictions&a=" + AGENCY;
 var ROUTES = {
-  WorkToEmbarcadero: {
-    J: 14510,
-    KT: 14510,
-    N: 14510
-  },
-  EmbarcaderoToHome: {
-    J: 17217,
-    KT: 17217,
-    N: 17217
+  HomeToEmbarcadero: {
+    show_only: ["*"],
+    stop_ids: [13998]
   },
   EmbarcaderoToWork: {
-    J: 16992,
-    KT: 16992,
-    N: 16992
+    show_only: ["KT", "N", "TBUS"],
+    stop_ids: [
+      16992,
+      136475] // TBUS
   },
-  HomeToEmbarcadero: {
-    J: 13998
+  WorkToEmbarcadero: {
+    show_only: ["*"],
+    stop_ids: [
+      14510,
+      17964]  // TBUS
+  },
+  EmbarcaderoToHome: {
+    show_only: ["J", "KT", "N"],
+    stop_ids: [17217],
   }
 };
 
@@ -81,10 +83,10 @@ function updateLists() {
   var promises = {};
   var url;
   clearAllIntervals();
-  $.each(ROUTES, function(dir, dir_data) {
+  $.each(ROUTES, function(dir, data) {
     promises[dir] = [];
-    $.each(dir_data, function(train, stop_id) {
-      url = API_URL + "&stopId=" + stop_id + "&routeTag=" + train;
+    $.each(data["stop_ids"], function(i, stop_id) {
+      url = API_URL + "&stopId=" + stop_id;
       promises[dir].push(xmlPromise(url));
     });
     Q.allSettled(promises[dir]).then(function(responses) {
@@ -95,24 +97,32 @@ function updateLists() {
       var n;
       var p;
       var predictions;
+      var show_only = ROUTES[dir]["show_only"];
       var time;
       var text;
       var xml;
       $.each(responses, function(i, response) {
         xml = response.value.documentElement;
-        predictions = xml.getElementsByTagName("predictions")[0];
-        $.each(xml.getElementsByTagName("direction"), function(i, d) {
-          $.each(d.getElementsByTagName("prediction"), function(i, p) {
-            epoch = parseInt(p.getAttribute("epochTime"), 10);
-            entry = {
-              train: predictions.getAttribute("routeTag"),
-              station: predictions.getAttribute("stopTitle"),
-            };
-            if (epoch in entries) {
-              entries[epoch].push(entry);
-            } else {
-              entries[epoch] = [entry];
-            }
+        $.each(xml.getElementsByTagName("predictions"), function(i, predictions) {
+          $.each(predictions.getElementsByTagName("direction"), function(i, d) {
+            $.each(d.getElementsByTagName("prediction"), function(i, p) {
+              epoch = parseInt(p.getAttribute("epochTime"), 10);
+              entry = {
+                train: predictions.getAttribute("routeTag"),
+                station: predictions.getAttribute("stopTitle"),
+              };
+              console.log(show_only);
+              console.log(entry["train"]);
+              console.log($.inArray(entry["train"], show_only) || $.inArray("*", show_only));
+              console.log((($.inArray(entry["train"], show_only) !== -1) || show_only[0] == "*"));
+              if ((($.inArray(entry["train"], show_only) !== -1) || show_only[0] == "*")) {
+                if (epoch in entries) {
+                  entries[epoch].push(entry);
+                } else {
+                  entries[epoch] = [entry];
+                }
+              }
+            });
           });
         });
       });
@@ -136,6 +146,7 @@ function updateLists() {
         });
       });
       li = document.createElement("li");
+      li.className = "timestamp";
       n = document.createTextNode(timeStamp());
       p = document.createElement("p");
       p.appendChild(n);

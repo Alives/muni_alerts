@@ -60,20 +60,37 @@ ul {
   list-style: none;
 }
 
+li.J {
+  background-color: orange;
+}
+
 li.KT {
   background-color: #d21245;
+}
+
+li.L {
+  background-color: #7519a3;
+}
+
+li.M {
+  background-color: #1a7646;
 }
 
 li.N {
   background-color: blue;
 }
 
-li.J {
-  background-color: orange;
+li.S {
+  background-color: #ab5992;
+}
+
+li.timestamp {
+  background-color: white;
 }
 
 li {
   color: white;
+  background-color: gray;
   padding: 2%;
 }
 
