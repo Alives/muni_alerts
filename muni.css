@@ -81,7 +81,8 @@ li.N {
 }
 
 li.S {
-  background-color: #ab5992;
+  background-color: yellow;
+  color: black;
 }
 
 li.timestamp {

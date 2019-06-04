@@ -111,10 +111,6 @@ function updateLists() {
                 train: predictions.getAttribute("routeTag"),
                 station: predictions.getAttribute("stopTitle"),
               };
-              console.log(show_only);
-              console.log(entry["train"]);
-              console.log($.inArray(entry["train"], show_only) || $.inArray("*", show_only));
-              console.log((($.inArray(entry["train"], show_only) !== -1) || show_only[0] == "*"));
               if ((($.inArray(entry["train"], show_only) !== -1) || show_only[0] == "*")) {
                 if (epoch in entries) {
                   entries[epoch].push(entry);
