@@ -2,24 +2,12 @@ var AGENCY = "sf-muni";
 var API_URL = "http://webservices.nextbus.com/service/publicXMLFeed?command=" +
   "predictions&a=" + AGENCY;
 var ROUTES = {
-  HomeToEmbarcadero: {
-    show_only: ["*"],
+  HomeToWork: {
+    show_only: ["J"],
     stop_ids: [13998]
   },
-  EmbarcaderoToWork: {
-    show_only: ["KT", "N", "TBUS"],
-    stop_ids: [
-      16992,
-      136475] // TBUS
-  },
-  WorkToEmbarcadero: {
-    show_only: ["*"],
-    stop_ids: [
-      14510,
-      17964]  // TBUS
-  },
-  EmbarcaderoToHome: {
-    show_only: ["J", "KT", "N"],
+  WorkToHome: {
+    show_only: ["J"],
     stop_ids: [17217],
   }
 };
